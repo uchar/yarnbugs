@@ -1,29 +1,29 @@
-FROM node:20-alpine AS dependencies
-RUN corepack enable
+# Use node alpine as the base image
+FROM node:20-alpine
+
+# Set the working directory to /app
 WORKDIR /app
+
+# Copy the necessary files for dependency installation
 COPY package.json ./
 COPY yarn.lock ./
 COPY tsconfig.json ./
-RUN yarn --immutable
 
-FROM node:20-alpine AS builder
+# Copy the source code into the container
+COPY src ./src
+
+# Enable production env for node
+ENV NODE_ENV=production
+
+# Install dependencies using Yarn 4
 RUN corepack enable
-WORKDIR /app
-COPY --from=dependencies /app/package.json ./
-COPY --from=dependencies /app/.pnp.cjs ./
-COPY --from=dependencies /app/.yarn ./.yarn
-COPY --from=dependencies /app/yarn.lock ./
-COPY --from=dependencies /app/tsconfig.json ./
-COPY --from=dependencies /root/.yarn /root/.yarn
-COPY ./src ./src
-RUN yarn dlx -p typescript@5.5.4 build
 
+#This one give error
+RUN --mount=type=cache,target=/root/.yarn YARN_CACHE_FOLDER=/root/.yarn \
+      yarn --immutable
 
-FROM node:20-alpine AS runner
-RUN corepack enable
-WORKDIR /app
-COPY --from=builder /app/build ./
-COPY --from=dependencies /app/.pnp.cjs ./
-COPY --from=dependencies /app/.yarn ./.yarn
-COPY --from=dependencies /root/.yarn /root/.yarn
-ENTRYPOINT ["node", "src/testCode.js"]
+#This one is correct
+#RUN yarn --immutable
+
+# Use a dynamic command to run the yarn initialization script defined by EXEC_COMMAND
+CMD sh -c " yarn $EXEC_COMMAND"

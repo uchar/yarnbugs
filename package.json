@@ -6,11 +6,13 @@
   "author": "uchar <omid.es73@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "tsc"
+    "test1": "tsx src/testCode1.ts",
+    "test2": "tsx src/testCode2.ts"
   },
   "dependencies": {
     "@types/node": "22.5.2",
     "tslib": "2.7.0",
+    "tsx": "4.19.1",
     "typescript": "5.5.4"
   },
   "packageManager": "yarn@4.4.1"

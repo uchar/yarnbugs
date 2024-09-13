@@ -1,0 +1,17 @@
+{
+  "name": "bugs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/RionizSoftware/yarnbugs.git",
+  "author": "uchar <omid.es73@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@types/node": "22.5.2",
+    "tslib": "2.7.0",
+    "typescript": "5.5.4"
+  },
+  "packageManager": "yarn@4.4.1"
+}

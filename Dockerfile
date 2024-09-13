@@ -14,8 +14,9 @@ COPY --from=dependencies /app/.pnp.cjs ./
 COPY --from=dependencies /app/.yarn ./.yarn
 COPY --from=dependencies /app/yarn.lock ./
 COPY --from=dependencies /app/tsconfig.json ./
+COPY --from=dependencies /root/.yarn /root/.yarn
 COPY ./src ./src
-RUN yarn build
+RUN yarn dlx -p typescript@5.5.4 build
 
 
 FROM node:20-alpine AS runner
@@ -24,4 +25,5 @@ WORKDIR /app
 COPY --from=builder /app/build ./
 COPY --from=dependencies /app/.pnp.cjs ./
 COPY --from=dependencies /app/.yarn ./.yarn
+COPY --from=dependencies /root/.yarn /root/.yarn
 ENTRYPOINT ["node", "src/testCode.js"]
